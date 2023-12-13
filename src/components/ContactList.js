@@ -9,10 +9,12 @@ export const ContactList = () => {
   const filter = useSelector(state => state.filter);
   const visibleContact = contacts.filter(item => {
     const trueContact = item.name.toLowerCase().includes(filter.toLowerCase());
+    console.log('filter');
     return trueContact;
   });
 
   useEffect(() => {
+    console.log('getcontacts');
     dispatch(fetchContacts());
   }, [dispatch]);
 
