@@ -1,14 +1,38 @@
 import { Formik } from 'formik';
 import { Form, Field, FormGroup } from './Form.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { add } from '../../redux/contactsSlice';
+import { selectContacts } from '../../redux/selectors';
+import { addContact } from 'api';
 
 export const ContactForm = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
+  const { contacts } = useSelector(selectContacts);
   const dispatch = useDispatch();
 
-  const addContact = newContact => {
-    dispatch(add(newContact));
+  const handleSubmit = async (values, actions) => {
+    const { name, number } = values;
+
+    if (!name || !number) {
+      alert('Please fill in both name and number fields.');
+      return;
+    }
+
+    const contactExists = contacts.some(
+      contact =>
+        contact.name.toLowerCase() === name.toLowerCase() ||
+        contact.number === number
+    );
+
+    if (contactExists) {
+      alert('Contact with this name or number already exists.');
+      return;
+    }
+
+    try {
+      await dispatch(addContact(values));
+      actions.resetForm();
+    } catch (error) {
+      console.error('Error adding contact:', error);
+    }
   };
 
   return (
@@ -18,28 +42,7 @@ export const ContactForm = () => {
           name: '',
           number: '',
         }}
-        onSubmit={(values, actions) => {
-          const { name, number } = values;
-
-          if (!name || !number) {
-            alert('Please fill in both name and number fields.');
-            return;
-          }
-
-          const contactExists = contacts.some(
-            contact =>
-              contact.name.toLowerCase() === name.toLowerCase() ||
-              contact.number === number
-          );
-
-          if (contactExists) {
-            alert('Contact with this name or number already exists.');
-            return;
-          }
-
-          addContact(values);
-          actions.resetForm();
-        }}
+        onSubmit={handleSubmit}
       >
         <Form>
           <FormGroup>

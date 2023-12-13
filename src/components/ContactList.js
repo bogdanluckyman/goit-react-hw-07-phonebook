@@ -1,24 +1,33 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { remove } from '../redux/contactsSlice';
+import { selectContacts } from '../redux/selectors';
+import { useEffect } from 'react';
+import { deleteContact, fetchContacts } from '../api';
 
 export const ContactList = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
-  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
+  const { contacts, isLoading, error } = useSelector(selectContacts);
+  const filter = useSelector(state => state.filter);
   const visibleContact = contacts.filter(item => {
     const trueContact = item.name.toLowerCase().includes(filter.toLowerCase());
     return trueContact;
   });
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <div>
       <ul>
+        {isLoading && <b>Loading tasks...</b>}
+        {error && <b>{error}</b>}
         {visibleContact.map(({ id, name, number }) => {
           return (
             <li key={id}>
               <b>
                 {name}: {number}
               </b>
-              <button type="button" onClick={() => dispatch(remove(id))}>
+              <button type="button" onClick={() => dispatch(deleteContact(id))}>
                 Delete
               </button>
             </li>

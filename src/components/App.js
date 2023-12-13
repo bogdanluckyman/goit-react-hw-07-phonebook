@@ -3,9 +3,10 @@ import { ContactForm } from './Form/Form';
 import { ContactList } from './ContactList';
 import { SearchBar } from './SearchBar';
 import { useSelector } from 'react-redux';
+import { selectContacts } from '../redux/selectors';
 
 export const App = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
+  const { contacts } = useSelector(selectContacts);
 
   return (
     <div>
