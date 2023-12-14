@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from '../redux/selectors';
-import { useEffect } from 'react';
-import { deleteContact, fetchContacts } from '../api';
+import { deleteContact } from '../api';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
@@ -12,11 +11,6 @@ export const ContactList = () => {
     console.log('filter');
     return trueContact;
   });
-
-  useEffect(() => {
-    console.log('getcontacts');
-    dispatch(fetchContacts());
-  }, [dispatch]);
 
   return (
     <div>
