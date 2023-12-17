@@ -1,23 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts } from '../redux/selectors';
+import { selectContacts, selectVisibleContacts } from '../redux/selectors';
 import { deleteContact } from '../api';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const { contacts, isLoading, error } = useSelector(selectContacts);
-  const filter = useSelector(state => state.filter);
-  const visibleContact = contacts.filter(item => {
-    const trueContact = item.name.toLowerCase().includes(filter.toLowerCase());
-    console.log('filter');
-    return trueContact;
-  });
+  const { isLoading, error } = useSelector(selectContacts);
+  const trueContact = useSelector(selectVisibleContacts);
 
   return (
     <div>
       <ul>
         {isLoading && <b>Loading tasks...</b>}
         {error && <b>{error}</b>}
-        {visibleContact.map(({ id, name, number }) => {
+        {trueContact.map(({ id, name, number }) => {
           return (
             <li key={id}>
               <b>

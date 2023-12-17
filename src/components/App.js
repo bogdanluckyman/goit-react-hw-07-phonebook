@@ -8,11 +8,10 @@ import { useEffect } from 'react';
 import { fetchContacts } from 'api';
 
 export const App = () => {
-  const { contacts } = useSelector(selectContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('getcontacts');
     dispatch(fetchContacts());
   }, [dispatch]);
   return (

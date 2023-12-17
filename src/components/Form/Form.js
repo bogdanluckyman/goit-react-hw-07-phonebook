@@ -5,7 +5,7 @@ import { selectContacts } from '../../redux/selectors';
 import { addContact } from 'api';
 
 export const ContactForm = () => {
-  const { contacts } = useSelector(selectContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = async (values, actions) => {
